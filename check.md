@@ -26,3 +26,22 @@ WHERE  id = (SELECT customer_id
 
 -- Kiểm tra (kỳ vọng mỗi câu UPDATE 1) rồi:
 -- COMMIT;
+
+
+
+SELECT
+    c.id,
+    c.code,
+    c.product_code,
+    c.status         AS contract_status,   -- 0 = Mới tạo
+    c.paid_at,
+    p.status         AS payment_status,
+    p.bill_code,
+    p.tx_id,
+    p.payment_method,
+    c.created_at
+FROM   contract c
+JOIN   payment_contract p ON p.contract_id = c.id
+WHERE  c.status = 0
+  AND  c.paid_at IS NOT NULL
+ORDER  BY c.paid_at DESC;
